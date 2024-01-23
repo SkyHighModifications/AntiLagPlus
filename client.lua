@@ -60,8 +60,8 @@ local exhausts = { "exhaust", "exhaust_2", "exhaust_3", "exhaust_4" }
 local fxName = "veh_backfire"
 local fxGroup = "core"
 
-RegisterNetEvent('sound_client:PlayWithinDistance')
-AddEventHandler('sound_client:PlayWithinDistance', function(coords, disMax, audoFile, audioVol)
+RegisterNetEvent('SHM-AntiLag:PlayWithinDistance')
+AddEventHandler('SHM-AntiLag:PlayWithinDistance', function(coords, disMax, audoFile, audioVol)
     local entityCoords   = GetEntityCoords(PlayerPedId())
     local distance       = #(entityCoords - coords)
     local distanceRatio  = distance / disMax        -- calculate the distance ratio
