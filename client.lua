@@ -1,47 +1,58 @@
 local isAntiLagEnabled = true
+local reverse = 0
 
 RegisterCommand("antilag", function()
     isAntiLagEnabled = not isAntiLagEnabled
     PlaySoundFrontend(-1, 'CONFIRM_BEEP', 'HUD_MINI_GAME_SOUNDSET', true)
-    message("~" ..
-        (isAntiLagEnabled and "g" or "r") ..
-        "~Antilag is now " .. (isAntiLagEnabled and "enabled" or "disabled") .. " for you~")
+    message("~" .. (isAntiLagEnabled and "g" or "r") ..
+        "~Antilag is now " .. (isAntiLagEnabled and "enabled" or "disabled") .. "~")
 end, false)
 
-local reverse = 0
+local function isPlayerInDriverSeat()
+    return GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == PlayerPedId()
+end
 
-CreateThread(function()
-    while true do
-        local sleep = 1000
-        local player = PlayerPedId()
-        local veh = GetVehiclePedIsIn(player, false)
-        local delay = math.random(25, Config.explosionSpeed)
-        if GetPedInVehicleSeat(GetVehiclePedIsIn(PlayerPedId()), -1) == player and isAntiLagEnabled then
-            sleep = 0
-            local RPM = GetVehicleCurrentRpm(veh, player)
-            local gear = GetVehicleCurrentGear(veh)
+local function isGearReverse(gear)
+    return gear == reverse 
+end
 
-            for _, cars in pairs(Config.Cars) do
-                local vehicleModel = GetEntityModel(veh, player)
-                if GetHashKey(cars) == vehicleModel then
-                    if gear ~= reverse then
-                        if not IsEntityInAir(veh) then
-                            if not IsControlPressed(1, 71) and not IsControlPressed(1, 72) then
-                                if RPM > Config.RPM then
-                                    TriggerServerEvent("flames", VehToNet(veh))
-                                    TriggerServerEvent("sound_server:PlayWithinDistance", 25.0,
-                                        tostring(math.random(1, 6)),
-                                        0.9)
-                                    SetVehicleTurboPressure(veh, 25)
-                                    Wait(delay)
-                                end
-                            end
-                        end
+local function isVehicleInAir(vehicle)
+    return IsEntityInAir(vehicle)
+end
+
+local function handleAntiLag(vehicle, gear, rpm, delay)
+    for _, carModel in pairs(Config.Cars) do
+        local vehicleModel = GetEntityModel(vehicle)
+        if GetHashKey(carModel) == vehicleModel then
+            if not isGearReverse(gear) and not isVehicleInAir(vehicle) then
+                if not IsControlPressed(1, 71) and not IsControlPressed(1, 72) then
+                    if rpm > Config.RPM then
+                        TriggerServerEvent("flames", VehToNet(vehicle))
+                        TriggerServerEvent("SHM-AntiLag:PlayWithinDistance", 25.0,
+                            tostring(math.random(1, 6)),
+                            0.9)
+                        SetVehicleTurboPressure(vehicle, 25)
+                        Wait(delay)
                     end
                 end
             end
         end
-        Wait(sleep)
+    end
+end
+
+CreateThread(function()
+    while true do
+        Wait(1000)
+        local player = PlayerPedId()
+        local vehicle = GetVehiclePedIsIn(player, false)
+
+        if isPlayerInDriverSeat() and isAntiLagEnabled then
+            local rpm = GetVehicleCurrentRpm(vehicle, player)
+            local gear = GetVehicleCurrentGear(vehicle)
+            local delay = math.random(25, Config.explosionSpeed)
+
+            handleAntiLag(vehicle, gear, rpm, delay)
+        end
     end
 end)
 
