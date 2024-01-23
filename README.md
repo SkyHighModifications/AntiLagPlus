@@ -1,24 +1,34 @@
-# yorick-antilag
+# Antilag Plus
 
-This script enables antilag and "twostep" functionality in your FiveM server. <br>
-There is a file `config.lua` which you can use to add new cars to the config or to modify existing values!
+Experience superior performance with SkyHigh Modifications' latest creation - Antilag Plus.
+
+Unleash the power of antilag and "twostep" functionality in your FiveM server, brought to you by the innovative team at SkyHigh Modifications. Enhance your server's performance with customizable options, allowing you to tailor the experience to your preferences.
+
+# Features
+
+- Explosion Speed: Control the intensity of explosions with a customizable speed. Default: `250`.
+
+- Supported Cars: Define the array of vehicles eligible for script functionality.
+
+- Flame Size: Adjust the size of flames generated. Default: `1.5`.
+
+- RPM Threshold: Fine-tune the RPM required to trigger antilag. Default: `0.85`.
+
+# Usage
+**In-Game Command:** ```/antilag```
+
+Toggle the script functionality for individual clients with a simple command, granting flexibility and control.
 
 # Configuration
 
-In addition to enabling antilag, you can also configure the following options:
+Explore the `config.lua` file to seamlessly add new cars or modify existing values, ensuring a tailored experience for your server.
 
-- explosionSpeed: The speed at which the explosion is created. Default value is 250. <br>
-- Cars: This cars in this array have the possibility to use the functionality of the script. <br>
-- flameSize: The size of the flames. Default is 1.5. <br>
-- RPM: The amount of RPM needed until the antilag is triggered. <br>
 
-# Commands 
+## Get in Touch
 
-- `/antilag` This is a command that makes it possible to turn off the functionality of the script for that client.
+Connect with us for support, feedback, or inquiries:
 
-# Custom audio
-- The script uses custom audio files that are played using NUI.
+[Discord](https://discord.gg/tKQgdQuJYF) | [Tebex](https://skyhigh-modifications.tebex.io/) | [UnionMods](https://unionmods.com/viewauthor?author=592) | [GTA5Mods](https://www.gta5-mods.com/users/BerkshireMods)
 
-# Usage
 
-To use antilag in your FiveM server, simply start the yorick-antilag resource, `ensure yorick-antilag`. By default, the antilag effect is triggered when the driver of the vehicle releases the W key when the car reaches a specific amount of RPM.
+Elevate your FiveM experience with Antilag Plus - Because performance matters.
