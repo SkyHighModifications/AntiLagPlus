@@ -1,12 +1,21 @@
-RegisterNetEvent("flames")
+local ANTI_LAG_EVENT = "flames"
+local PLAY_WITHIN_DISTANCE_EVENT = "SHM-AntiLag:PlayWithinDistance"
 
-AddEventHandler("flames", function(entity)
-    if type(entity) ~= "number" then return end
-    TriggerClientEvent("client_flames", -1, entity)
+RegisterNetEvent(ANTI_LAG_EVENT)
+AddEventHandler(ANTI_LAG_EVENT, function(entity)
+    if type(entity) == "number" then
+        TriggerClientEvent("client_flames", -1, entity)
+    else
+        print("[WARNING] Invalid 'entity' type in 'flames' event.")
+    end
 end)
 
-RegisterNetEvent('sound_server:PlayWithinDistance')
-AddEventHandler('sound_server:PlayWithinDistance', function(disMax, audioFile, audioVol)
-    TriggerClientEvent('sound_client:PlayWithinDistance', -1, GetEntityCoords(GetPlayerPed(source)), disMax, audioFile,
-        audioVol)
+RegisterNetEvent(PLAY_WITHIN_DISTANCE_EVENT)
+AddEventHandler(PLAY_WITHIN_DISTANCE_EVENT, function(disMax, audioFile, audioVol)
+    local playerCoords = GetEntityCoords(GetPlayerPed(source))
+    if type(disMax) == "number" and type(audioFile) == "string" and type(audioVol) == "number" then
+        TriggerClientEvent(PLAY_WITHIN_DISTANCE_EVENT, -1, playerCoords, disMax, audioFile, audioVol)
+    else
+        print("[WARNING] Invalid parameters in 'PlayWithinDistance' event.")
+    end
 end)
